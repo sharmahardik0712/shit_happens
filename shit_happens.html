@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💩 Shit Happens</title>
+<style>
+  :root {
+    --ink: #211a15;
+    --paper: #f4ede0;
+    --card: #fffdf8;
+    --poo: #8a5a2b;
+    --danger: #c1652f;
+    --line: #e9dfc9;
+    --muted: #948572;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background:
+      radial-gradient(circle at 20% 15%, rgba(138,90,43,0.08), transparent 40%),
+      radial-gradient(circle at 80% 85%, rgba(193,101,47,0.10), transparent 45%),
+      var(--paper);
+    color: var(--ink);
+  }
+
+  .card {
+    width: min(92%, 440px);
+    background: var(--card);
+    border-radius: 28px;
+    padding: 38px 30px 26px;
+    text-align: center;
+    box-shadow: 0 16px 50px rgba(33,26,21,0.12);
+    border: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle, var(--line) 1.5px, transparent 1.5px);
+    background-size: 22px 22px;
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  .emoji {
+    font-size: 60px;
+    line-height: 1;
+    margin-bottom: 10px;
+    display: inline-block;
+    animation: plop 3s ease-in-out infinite;
+  }
+
+  @keyframes plop {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-6px) rotate(-4deg); }
+  }
+
+  .title {
+    font-size: 32px;
+    font-weight: 900;
+    margin: 0;
+    letter-spacing: -0.5px;
+    position: relative;
+  }
+
+  .subtitle {
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 14px;
+    font-style: italic;
+  }
+
+  .today-label {
+    margin-top: 32px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: var(--danger);
+  }
+
+  .person {
+    margin-top: 4px;
+    font-size: 42px;
+    font-weight: 900;
+    position: relative;
+    display: inline-block;
+  }
+
+  .date {
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .message {
+    margin-top: 18px;
+    padding: 14px 16px;
+    background: #f9f2e4;
+    border: 1px dashed var(--line);
+    border-radius: 14px;
+    font-size: 14.5px;
+    font-weight: 600;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 26px 0 16px;
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .divider::before, .divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .schedule {
+    display: grid;
+    gap: 8px;
+    text-align: left;
+  }
+
+  .person-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-radius: 14px;
+    background: #f8f4ea;
+    font-size: 15px;
+    border: 1px solid transparent;
+  }
+
+  .person-row.today {
+    background: var(--ink);
+    color: var(--paper);
+    font-weight: 800;
+    transform: scale(1.02);
+  }
+
+  .badge {
+    font-size: 12px;
+    opacity: 0.85;
+  }
+
+  .footer {
+    margin-top: 24px;
+    font-size: 11.5px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+</style>
+</head>
+
+<body>
+
+<main class="card">
+
+  <div class="emoji">💩</div>
+  <h1 class="title">Shit Happens</h1>
+  <div class="subtitle">and today, it happens to someone specific.</div>
+
+  <div class="today-label">Today's Victim</div>
+  <div class="person" id="person">Loading...</div>
+  <div class="date" id="date"></div>
+
+  <div class="message" id="message"></div>
+
+  <div class="divider">The Sacred Rotation</div>
+
+  <div class="schedule" id="schedule"></div>
+
+  <div class="footer" id="footer"></div>
+
+</main>
+
+<script>
+  const people = ["Vatsalya", "Pragati", "Hardik", "Suyash"];
+
+  const startDate = new Date(2026, 7, 11); // Aug 11, 2026 = Vatsalya
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const msPerDay = 1000 * 60 * 60 * 24;
+  const daysPassed = Math.floor((today - startDate) / msPerDay);
+  const todayIndex = ((daysPassed % people.length) + people.length) % people.length;
+  const todayPerson = people[todayIndex];
+
+  document.getElementById("person").textContent = todayPerson;
+
+  document.getElementById("date").textContent =
+    today.toLocaleDateString("en-IN", {
+      weekday: "long", day: "numeric", month: "long", year: "numeric"
+    });
+
+  const messages = [
+    "The litter box has chosen you. 💩",
+    "Congratulations. You have been selected. 🫡",
+    "The poop waits for no one.",
+    "Someone's gotta scoop it.",
+    "Your cat has summoned you.",
+    "Today, you serve the kingdom. 👑",
+    "Remember: you chose to live here.",
+    "It's not a bug. It's a feature.",
+    "Shit happens. Today, it's your shit.",
+    "The council has spoken.",
+    "Destiny stinks, and so does this box.",
+    "No refunds. No substitutions. No mercy."
+  ];
+
+  const messageIndex = ((daysPassed % messages.length) + messages.length) % messages.length;
+  document.getElementById("message").textContent = messages[messageIndex];
+
+  const schedule = document.getElementById("schedule");
+  people.forEach((person, index) => {
+    const row = document.createElement("div");
+    row.className = "person-row" + (index === todayIndex ? " today" : "");
+    const daysUntil = (index - todayIndex + people.length) % people.length;
+    const badge = daysUntil === 0 ? "💩 TODAY"
+      : daysUntil === 1 ? "tomorrow, brace yourself"
+      : `${daysUntil} days of freedom left`;
+    row.innerHTML = `<span>${person}</span><span class="badge">${badge}</span>`;
+    schedule.appendChild(row);
+  });
+
+  document.getElementById("footer").textContent =
+    "No cats were consulted in the making of this roster. Frankly, they don't care who scoops, as long as it's not them.";
+</script>
+
+</body>
+</html>
